@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { AccessService } from "services/access.service";
 
-export default App;
+import { Router } from "./components/common";
+
+export const App = () => {
+  const getToken = async () => {
+    const { token } = await AccessService.getToken().then((response) => response.json());
+
+    localStorage.setItem("token", JSON.stringify(token));
+  };
+
+  useEffect(() => {
+    const tokenInLocalStorage = localStorage.getItem("token");
+
+    if (!tokenInLocalStorage) {
+      getToken();
+    }
+  }, []);
+
+  return <Router />;
+};

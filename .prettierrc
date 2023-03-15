@@ -1,0 +1,16 @@
+{
+  "trailingComma": "none",
+  "printWidth": 160,
+  "importOrder": [
+    "^react(/.*)?$",
+    "^next(/.*)?$",
+
+    "<THIRD_PARTY_MODULES>",
+
+    "^(pages|layouts|components|store|hooks|constants|store|configs|services|utils|declarations|contexts|styles)(/.*|$)",
+
+    "^[./|~/]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
