@@ -72,18 +72,19 @@ export const CourseCard: FC<ICourseCard> = (props) => {
   };
 
   useEffect(() => {
-    if (Hls.isSupported() && playerRef.current) {
-      const video = playerRef.current;
-      const hls = new Hls();
+    const video = playerRef.current;
+    const hls = new Hls();
 
-      // MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
-      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-        console.log("video and hls.js are now bound together !");
-      });
-      hls.loadSource(courseVideoPreview.link as string);
+    if (video) {
+      hls.loadSource(`/proxy/${courseVideoPreview.link as string}`);
       hls.attachMedia(video);
-      video.play();
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+      });
     }
+    return () => {
+      hls.destroy();
+    };
   }, []);
 
   return (
@@ -99,15 +100,7 @@ export const CourseCard: FC<ICourseCard> = (props) => {
           width: "100%"
         }}
       >
-        <video
-          ref={(player) => (playerRef.current = player)}
-          muted={true}
-          preload="auto"
-          crossOrigin="anonymous"
-          style={videoShowed ? shownVideoStyles : unShownVideoStyles}
-        >
-          <source src={courseVideoPreview.link as string} type="application/x-mpegURL" />
-        </video>
+        <video ref={(player) => (playerRef.current = player)} style={videoShowed ? shownVideoStyles : unShownVideoStyles}></video>
         {!videoShowed && (
           <>
             <Box
