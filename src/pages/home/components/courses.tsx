@@ -1,18 +1,10 @@
 import { ChangeEvent, useMemo, useState } from "react";
 
 import { Box, Pagination, Paper, Stack } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
 import { CourseCard } from "components/cards";
 import { Container, Loader } from "components/ui";
 import { useGetCoursesQuery } from "store/api";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  textAlign: "center",
-  color: theme.palette.text.secondary
-}));
 
 const LIMIT = 10;
 
@@ -44,9 +36,9 @@ export const Courses = () => {
           <>
             <Stack spacing={3}>
               {paginatedCourses?.map((course) => (
-                <Item key={course.id}>
+                <Paper key={course.id}>
                   <CourseCard {...course} />
-                </Item>
+                </Paper>
               ))}
             </Stack>
             <Stack sx={{ marginTop: "20px" }}>
