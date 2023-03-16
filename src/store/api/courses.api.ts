@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { REACT_APP_API_HOST, REACT_APP_API_VERSION } from "utils/constants";
-import { ICourse } from "utils/types";
+import { ICourseCard } from "utils/types";
 
 export const coursesApi = createApi({
   reducerPath: "coursesApi",
@@ -16,7 +16,7 @@ export const coursesApi = createApi({
     }
   }),
   endpoints: (builder) => ({
-    getCourses: builder.query<{ courses: ICourse[] }, void>({
+    getCourses: builder.query<{ courses: ICourseCard[] }, void>({
       query: () => ({
         url: "/core/preview-courses"
       })

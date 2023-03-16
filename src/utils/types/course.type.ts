@@ -1,6 +1,7 @@
+import { ILesson } from "./lesson.type";
 import { IMeta } from "./meta.type";
 
-export interface ICourse {
+export interface ICourseBase {
   id: string;
   title: string;
   tags: string[];
@@ -8,9 +9,16 @@ export interface ICourse {
   status: string;
   description: string;
   duration: number;
-  lessonsCount: number;
   containsLockedLessons: boolean;
   previewImageLink: string;
   rating: number;
   meta: IMeta;
+}
+
+export interface ICourseCard extends ICourseBase {
+  lessonsCount: number;
+}
+
+export interface ICourseInfo extends ICourseBase {
+  lessons: ILesson[];
 }

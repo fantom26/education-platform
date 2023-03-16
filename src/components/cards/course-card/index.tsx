@@ -1,14 +1,11 @@
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import { Box, Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
+import Hls from "hls.js";
 
-import { ICourse } from "utils/types";
+import { ICourseCard } from "utils/types";
 
-import { CourseCardActions } from "./components/actions";
-import { Created } from "./components/created";
-import { Duration } from "./components/duration";
-import { Lessons } from "./components/lessons";
-import { Skills } from "./components/skills";
+import { CourseCardActions, Created, Duration, Lessons, Skills } from "./components";
 
 interface IVideoInfo {
   slug: string;
@@ -30,12 +27,13 @@ const unShownVideoStyles = {
   clip: "rect(0 0 0 0)"
 };
 
-export const CourseCard: FC<ICourse> = (props) => {
-  const { title, description, previewImageLink, rating, duration, launchDate, lessonsCount, containsLockedLessons: isPaid, meta } = props;
+export const CourseCard: FC<ICourseCard> = (props) => {
+  const { id, title, description, previewImageLink, rating, duration, launchDate, lessonsCount, containsLockedLessons: isPaid, meta } = props;
   const { slug: courseSlug, skills, courseVideoPreview } = meta;
   const [cachedVideos, setCachedVideos] = useState<IVideoInfo[]>([]);
   const [videoShowed, setVideoShowed] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const playerRef = useRef<HTMLVideoElement | null>(null);
 
   const handleMouseMove = (videoSlug: string) => {
     setVideoShowed(true);
@@ -46,35 +44,47 @@ export const CourseCard: FC<ICourse> = (props) => {
       const currentVideo = cachedVideos.find(({ slug }) => slug === courseSlug);
 
       if (currentVideo) {
-        if (videoRef.current) {
-          videoRef.current.currentTime = currentVideo.time || 0;
-          videoRef.current.play();
-        }
+        // if (videoRef.current) {
+        // videoRef.current.getCurrentTime() = currentVideo.time || 0;
+        // videoRef.current.play();
+        // }
       } else {
         setCachedVideos((prev) => [...prev, { slug: videoSlug, time: null }]);
-        if (videoRef.current) {
-          videoRef.current.play();
-        }
+        // if (videoRef.current) {
+        // videoRef.current.play();
+        // }
       }
     } else {
       setCachedVideos([{ slug: videoSlug, time: null }]);
-      if (videoRef.current) {
-        videoRef.current.play();
-      }
+      // if (videoRef.current) {
+      // videoRef.current.play();
+      // }
     }
   };
 
   const handleMouseLeave = (videoSlug: string) => {
     setVideoShowed(false);
 
-    if (videoRef.current) {
-      videoRef.current.pause();
-      setCachedVideos((prev) => [
-        ...prev.filter(({ slug }) => slug !== videoSlug),
-        { slug: videoSlug, time: (videoRef.current as HTMLVideoElement).currentTime }
-      ]);
-    }
+    // if (videoRef.current) {
+    // videoRef.current.pause();
+    // setCachedVideos((prev) => [...prev.filter(({ slug }) => slug !== videoSlug), { slug: videoSlug, time: (videoRef.current as FilePlayer).getCurrentTime() }]);
+    // }
   };
+
+  useEffect(() => {
+    if (Hls.isSupported() && playerRef.current) {
+      const video = playerRef.current;
+      const hls = new Hls();
+
+      // MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        console.log("video and hls.js are now bound together !");
+      });
+      hls.loadSource(courseVideoPreview.link as string);
+      hls.attachMedia(video);
+      video.play();
+    }
+  }, []);
 
   return (
     <Card
@@ -89,7 +99,13 @@ export const CourseCard: FC<ICourse> = (props) => {
           width: "100%"
         }}
       >
-        <video ref={videoRef} muted={true} preload="auto" style={videoShowed ? shownVideoStyles : unShownVideoStyles}>
+        <video
+          ref={(player) => (playerRef.current = player)}
+          muted={true}
+          preload="auto"
+          crossOrigin="anonymous"
+          style={videoShowed ? shownVideoStyles : unShownVideoStyles}
+        >
           <source src={courseVideoPreview.link as string} type="application/x-mpegURL" />
         </video>
         {!videoShowed && (
@@ -117,7 +133,7 @@ export const CourseCard: FC<ICourse> = (props) => {
         )}
       </Box>
 
-      <CardContent sx={{ maxWidth: 500, marginRight: "auto", paddingTop: 1, paddingLeft: 1, display: "flex", flexDirection: "column" }}>
+      <CardContent sx={{ maxWidth: 600, marginRight: "auto", paddingTop: 1, paddingLeft: 1, display: "flex", flexDirection: "column" }}>
         <Stack sx={{ height: "100%" }} spacing={2}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1, flex: 1 }}>
             <Typography align="left" variant="h6" component="h2">
@@ -136,7 +152,7 @@ export const CourseCard: FC<ICourse> = (props) => {
         </Stack>
       </CardContent>
 
-      <CourseCardActions rating={rating} />
+      <CourseCardActions id={id} rating={rating} />
     </Card>
   );
 };
