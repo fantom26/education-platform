@@ -29,59 +29,30 @@ const unShownVideoStyles = {
 
 export const CourseCard: FC<ICourseCard> = (props) => {
   const { id, title, description, previewImageLink, rating, duration, launchDate, lessonsCount, containsLockedLessons: isPaid, meta } = props;
-  const { slug: courseSlug, skills, courseVideoPreview } = meta;
-  const [cachedVideos, setCachedVideos] = useState<IVideoInfo[]>([]);
+  const { skills, courseVideoPreview } = meta;
   const [videoShowed, setVideoShowed] = useState(false);
 
   const playerRef = useRef<HTMLVideoElement | null>(null);
 
-  const handleMouseMove = (videoSlug: string) => {
+  const handleMouseMove = () => {
     setVideoShowed(true);
-
-    if (videoShowed) return;
-
-    if (cachedVideos.length > 0) {
-      const currentVideo = cachedVideos.find(({ slug }) => slug === courseSlug);
-
-      if (currentVideo) {
-        // if (videoRef.current) {
-        // videoRef.current.getCurrentTime() = currentVideo.time || 0;
-        // videoRef.current.play();
-        // }
-      } else {
-        setCachedVideos((prev) => [...prev, { slug: videoSlug, time: null }]);
-        // if (videoRef.current) {
-        // videoRef.current.play();
-        // }
-      }
-    } else {
-      setCachedVideos([{ slug: videoSlug, time: null }]);
-      // if (videoRef.current) {
-      // videoRef.current.play();
-      // }
-    }
+    playerRef.current?.play();
   };
 
-  const handleMouseLeave = (videoSlug: string) => {
+  const handleMouseLeave = () => {
     setVideoShowed(false);
-
-    // if (videoRef.current) {
-    // videoRef.current.pause();
-    // setCachedVideos((prev) => [...prev.filter(({ slug }) => slug !== videoSlug), { slug: videoSlug, time: (videoRef.current as FilePlayer).getCurrentTime() }]);
-    // }
+    playerRef.current?.pause();
   };
 
   useEffect(() => {
     const video = playerRef.current;
     const hls = new Hls();
 
-    if (video) {
-      hls.loadSource(`/proxy/${courseVideoPreview.link as string}`);
+    if (Hls.isSupported() && video) {
+      hls.loadSource(courseVideoPreview.link as string);
       hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play();
-      });
     }
+
     return () => {
       hls.destroy();
     };
@@ -90,8 +61,8 @@ export const CourseCard: FC<ICourseCard> = (props) => {
   return (
     <Card
       sx={{ minWidth: 275, minHeight: 225, display: "flex", justifyContent: "space-between", gap: 3 }}
-      onMouseMove={() => handleMouseMove(courseSlug)}
-      onMouseLeave={() => handleMouseLeave(courseSlug)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       <Box
         sx={{
@@ -100,7 +71,7 @@ export const CourseCard: FC<ICourseCard> = (props) => {
           width: "100%"
         }}
       >
-        <video ref={(player) => (playerRef.current = player)} style={videoShowed ? shownVideoStyles : unShownVideoStyles}></video>
+        <video ref={playerRef} muted preload="auto" loop style={videoShowed ? shownVideoStyles : unShownVideoStyles}></video>
         {!videoShowed && (
           <>
             <Box

@@ -56,7 +56,7 @@ const Course: FC = () => {
             </Link>
             <Typography color="text.primary">{info?.title}</Typography>
           </Breadcrumbs>
-          <Box>
+          <Box sx={{ marginBottom: "20px" }}>
             <Typography variant="h4" component="h1">
               {info?.title}
             </Typography>
