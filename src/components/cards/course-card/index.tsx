@@ -1,16 +1,11 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 
 import { Box, Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
-import Hls from "hls.js";
 
+import { useHLSPlayer } from "hooks";
 import { ICourseCard } from "utils/types";
 
 import { CourseCardActions, Created, Duration, Lessons, Skills } from "./components";
-
-interface IVideoInfo {
-  slug: string;
-  time: number | null;
-}
 
 const shownVideoStyles = {
   height: "100%",
@@ -31,8 +26,8 @@ export const CourseCard: FC<ICourseCard> = (props) => {
   const { id, title, description, previewImageLink, rating, duration, launchDate, lessonsCount, containsLockedLessons: isPaid, meta } = props;
   const { skills, courseVideoPreview } = meta;
   const [videoShowed, setVideoShowed] = useState(false);
-
   const playerRef = useRef<HTMLVideoElement | null>(null);
+  useHLSPlayer({ link: courseVideoPreview.link as string, playerRef });
 
   const handleMouseMove = () => {
     setVideoShowed(true);
@@ -43,20 +38,6 @@ export const CourseCard: FC<ICourseCard> = (props) => {
     setVideoShowed(false);
     playerRef.current?.pause();
   };
-
-  useEffect(() => {
-    const video = playerRef.current;
-    const hls = new Hls();
-
-    if (Hls.isSupported() && video) {
-      hls.loadSource(courseVideoPreview.link as string);
-      hls.attachMedia(video);
-    }
-
-    return () => {
-      hls.destroy();
-    };
-  }, []);
 
   return (
     <Card
@@ -71,7 +52,7 @@ export const CourseCard: FC<ICourseCard> = (props) => {
           width: "100%"
         }}
       >
-        <video ref={playerRef} muted preload="auto" loop style={videoShowed ? shownVideoStyles : unShownVideoStyles}></video>
+        <video ref={playerRef} muted preload="metadata" loop style={videoShowed ? shownVideoStyles : unShownVideoStyles}></video>
         {!videoShowed && (
           <>
             <Box

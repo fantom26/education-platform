@@ -12,10 +12,10 @@ interface LessonsProps {
 }
 
 export const Lessons: FC<LessonsProps> = ({ lessons, currentLesson, onSelectLesson }) => (
-  <List>
+  <List sx={{ height: 500, overflowY: "auto" }}>
     {lessons?.map((lesson, index) => (
-      <ListItem key={lesson.id} onClick={() => onSelectLesson(lesson)} disablePadding>
-        <ListItemButton disabled={lesson?.status === "locked"} selected={lesson?.id === currentLesson.id}>
+      <ListItem key={lesson.id} disablePadding>
+        <ListItemButton onClick={() => onSelectLesson(lesson)} disabled={lesson?.status === "locked"} divider selected={lesson?.id === currentLesson.id}>
           <Stack gap={0.5} flex={1}>
             <Stack direction="row" gap={1} justifyContent="space-between">
               <Typography variant="caption">{`Lesson ${index + 1}`}</Typography>

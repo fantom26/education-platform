@@ -46,7 +46,7 @@ const Course: FC = () => {
 
   return (
     <Box sx={{ paddingBlock: "20px" }}>
-      {loading ? (
+      {loading || !info ? (
         <Loader />
       ) : (
         <Container>
