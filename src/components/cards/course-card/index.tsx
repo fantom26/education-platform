@@ -27,7 +27,7 @@ export const CourseCard: FC<ICourseCard> = (props) => {
   const { skills, courseVideoPreview } = meta;
   const [videoShowed, setVideoShowed] = useState(false);
   const playerRef = useRef<HTMLVideoElement | null>(null);
-  useHLSPlayer({ link: courseVideoPreview.link as string, playerRef });
+  useHLSPlayer({ link: (courseVideoPreview?.link as string) || "", playerRef });
 
   const handleMouseMove = () => {
     setVideoShowed(true);
