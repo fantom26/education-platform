@@ -8,7 +8,7 @@ import { ILesson } from "utils/types";
 export const Player: FC<{ lesson: ILesson }> = ({ lesson }) => {
   const playerRef = useRef<HTMLVideoElement | null>(null);
 
-  useHLSPlayer({ link: lesson.link as string, playerRef });
+  useHLSPlayer({ link: (lesson.link as string) || "", playerRef });
 
   return (
     <Box sx={{ flex: 1 }}>

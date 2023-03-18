@@ -43,11 +43,13 @@ export const Courses = () => {
 
   // In this useEffect I sync local page and url page
   useEffect(() => {
-    setPage(+paramsURL?.page);
-    setIndexes({
-      startIndex: (+paramsURL?.page - 1) * LIMIT,
-      endIndex: +paramsURL?.page * LIMIT
-    });
+    if (paramsURL?.page) {
+      setPage(+paramsURL?.page);
+      setIndexes({
+        startIndex: (+paramsURL?.page - 1) * LIMIT,
+        endIndex: +paramsURL?.page * LIMIT
+      });
+    }
   }, [paramsURL?.page]);
 
   return (
@@ -65,7 +67,7 @@ export const Courses = () => {
                 </Paper>
               ))}
             </Stack>
-            {(filteredCourses?.length || 0) > LIMIT && <Pagination courses={filteredCourses || []} page={page} changePage={changePage} />}
+            {(filteredCourses?.length || 0) > LIMIT && !isLoading && <Pagination courses={filteredCourses || []} page={page} changePage={changePage} />}
           </>
         )}
       </Container>
