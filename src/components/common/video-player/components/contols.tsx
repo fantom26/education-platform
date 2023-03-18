@@ -57,6 +57,26 @@ const ProgressBar = styled(Slider)({
   }
 });
 
+const VolumeBar = styled(Slider)({
+  height: 5,
+  "& .MuiSlider-track": {
+    border: "none",
+    backgroundColor: "#fff"
+  },
+  "& .MuiSlider-thumb": {
+    height: 12,
+    width: 12,
+    backgroundColor: "#fff",
+    border: "2px solid currentColor",
+    "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
+      boxShadow: "inherit"
+    },
+    "&:before": {
+      display: "none"
+    }
+  }
+});
+
 const VolumeWrapper = styled("div")({
   display: "flex",
   alignItems: "center",
@@ -193,7 +213,7 @@ export const Controls: FC<ControlsProps> = (props) => {
             <IconButton onClick={muting} style={{ color: "white" }}>
               {generateVolumeIcon(volume)}
             </IconButton>
-            <Slider min={0} max={100} value={volume * 100} onChange={volumeChange} onChangeCommitted={volumeSeek} className="range" />
+            <VolumeBar min={0} max={100} value={volume * 100} onChange={volumeChange} onChangeCommitted={volumeSeek} className="range" />
           </VolumeWrapper>
         </Stack>
         <div>

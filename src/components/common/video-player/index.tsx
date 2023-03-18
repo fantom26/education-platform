@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useRef, useState } from "react";
+import { FC, KeyboardEvent, SyntheticEvent, useRef, useState } from "react";
 
 import { styled } from "@mui/material/styles";
 
@@ -102,10 +102,24 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
     }
   };
 
+  const handlePlayerRateByKeyboard = (event: KeyboardEvent<HTMLVideoElement>) => {
+    console.log(event);
+    if (event.code === "KeyZ" && (event.ctrlKey || event.metaKey)) {
+      console.log("log");
+    }
+  };
+
   const handlePlayerRate = (rate: number) => {
     setPlayerState({ ...playerState, playerbackRate: rate });
     if (playerRef.current) {
       playerRef.current.playbackRate = rate;
+    }
+  };
+
+  const setFocusOnVideo = () => {
+    if (playerRef.current) {
+      console.log("focus");
+      playerRef.current.focus();
     }
   };
 
@@ -161,8 +175,11 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
         preload="metadata"
         ref={playerRef}
         poster={poster}
+        onPlay={setFocusOnVideo}
         onClick={handlePlayAndPause}
         onTimeUpdate={handlePlayerProgress}
+        onKeyDown={(e) => handlePlayerRateByKeyboard(e)}
+        tabIndex={0}
         width="100%"
         height="100%"
       ></video>
