@@ -1,5 +1,7 @@
 import { FC, SyntheticEvent, useRef, useState } from "react";
 
+import { styled } from "@mui/material/styles";
+
 import { useHLSPlayer } from "hooks";
 
 import { Controls } from "./components/contols";
@@ -21,6 +23,11 @@ const format = (seconds: number | string): string => {
   }
 };
 
+const PlayerStyled = styled("div")({
+  position: "relative",
+  display: "flex"
+});
+
 interface VideoPlayerProps {
   poster?: string;
   link: string;
@@ -34,7 +41,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
     played: 0,
     seeking: false
   });
-  const { playing, volume, playerbackRate, played, seeking } = playerState;
+  const { playing, volume, playerbackRate, played } = playerState;
   const [openedFullScreen, setOpenedFullScreen] = useState(false);
   const playerWrapperRef = useRef<HTMLDivElement | null>(null);
   const playerRef = useRef<HTMLVideoElement | null>(null);
@@ -119,6 +126,12 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
     }
   };
 
+  const handlePictureInpicture = () => {
+    if (playerRef.current) {
+      playerRef.current.requestPictureInPicture();
+    }
+  };
+
   const handlePlayerMouseSeekDown = () => {
     setPlayerState({ ...playerState, seeking: true });
   };
@@ -143,15 +156,15 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
   const fullMovieTime = format(movieDuration);
 
   return (
-    <div ref={playerWrapperRef}>
+    <PlayerStyled ref={playerWrapperRef}>
       <video
         preload="metadata"
         ref={playerRef}
         poster={poster}
+        onClick={handlePlayAndPause}
         onTimeUpdate={handlePlayerProgress}
         width="100%"
         height="100%"
-        style={{ objectFit: "cover" }}
       ></video>
       <Controls
         playandpause={handlePlayAndPause}
@@ -171,7 +184,8 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
         onSeek={handlePlayerSeek}
         onSeekMouseUp={handlePlayerMouseSeekUp}
         onSeekMouseDown={handlePlayerMouseSeekDown}
+        onPip={handlePictureInpicture}
       />
-    </div>
+    </PlayerStyled>
   );
 };

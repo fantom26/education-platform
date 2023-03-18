@@ -17,12 +17,16 @@ import { styled } from "@mui/material/styles";
 
 const ProgressBar = styled(Slider)({
   height: 5,
+  width: "calc(100% - 10px)",
+  display: "block",
+  marginLeft: "auto",
+  marginRight: "auto",
   "& .MuiSlider-track": {
     border: "none"
   },
   "& .MuiSlider-thumb": {
-    height: 16,
-    width: 16,
+    height: 12,
+    width: 12,
     backgroundColor: "#fff",
     border: "2px solid currentColor",
     "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
@@ -53,21 +57,52 @@ const ProgressBar = styled(Slider)({
   }
 });
 
+const VolumeWrapper = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  width: 150,
+  gap: 5,
+  "& > .range": {
+    width: "0%",
+    maxWidth: "100px",
+    opacity: "0",
+    visibility: "hidden",
+    transition: "width 0.3s, opacity 0.3s, visibility 0.3s"
+  },
+  "&:hover > .range": {
+    width: "100%",
+    opacity: "1",
+    visibility: "visible",
+    transition: "width 0.3s, opacity 0.3s, visibility 0.3s"
+  }
+});
+
+const ControlsStyled = styled("div")({
+  position: "absolute",
+  left: "0",
+  right: "0",
+  bottom: "0",
+  zIndex: "5",
+  backgroundColor: "rgb(0 0 0 / 29%)",
+  boxShadow: "0 0 40px 10px rgb(0 0 0 / 25%)"
+});
+
 interface ControlsProps {
-  rewind: () => void;
-  fastForward: () => void;
-  playandpause: () => void;
   playing: boolean;
-  volumeChange: (event: Event, value: number | Array<number>, activeThumb: number) => void;
-  volumeSeek: (event: SyntheticEvent | Event, value: number | Array<number>) => void;
-  onSeek: (event: Event, value: number | Array<number>, activeThumb: number) => void;
   volume: number;
-  muting: () => void;
-  fullScreenMode: () => void;
   playedTime: string;
   played: number;
   fullMovieTime: string;
   playerbackRate: number;
+  rewind: () => void;
+  fastForward: () => void;
+  playandpause: () => void;
+  volumeChange: (event: Event, value: number | Array<number>, activeThumb: number) => void;
+  volumeSeek: (event: SyntheticEvent | Event, value: number | Array<number>) => void;
+  onSeek: (event: Event, value: number | Array<number>, activeThumb: number) => void;
+  muting: () => void;
+  fullScreenMode: () => void;
+  onPip: () => void;
   playRate: (rate: number) => void;
   onSeekMouseDown: () => void;
   onSeekMouseUp: (event: SyntheticEvent | Event, value: number | Array<number>) => void;
@@ -75,23 +110,24 @@ interface ControlsProps {
 
 export const Controls: FC<ControlsProps> = (props) => {
   const {
+    playing,
+    volume,
+    played,
+    playedTime,
+    fullMovieTime,
+    playerbackRate,
     rewind,
     fastForward,
     playandpause,
-    playing,
     volumeChange,
     volumeSeek,
     muting,
     fullScreenMode,
-    volume,
-    played,
+    onPip,
     onSeek,
-    playedTime,
     onSeekMouseUp,
-    fullMovieTime,
     playRate,
-    onSeekMouseDown,
-    playerbackRate
+    onSeekMouseDown
   } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   // TODO replace any
@@ -128,7 +164,7 @@ export const Controls: FC<ControlsProps> = (props) => {
   };
 
   return (
-    <div className="video_controls">
+    <ControlsStyled>
       <ProgressBar
         min={0}
         max={100}
@@ -142,24 +178,27 @@ export const Controls: FC<ControlsProps> = (props) => {
         // }}
       />
       <Stack direction="row" gap={2} justifyContent="space-between">
-        <div className="video_controls-left">
+        <Stack direction="row" gap={1} alignItems="center">
           <IconButton onClick={rewind}>
-            <Replay10 />
+            <Replay10 style={{ color: "white" }} />
           </IconButton>
-          <IconButton onClick={playandpause}>{playing ? <PauseCircle /> : <PlayCircle />}</IconButton>
+          <IconButton onClick={playandpause}>{playing ? <PauseCircle style={{ color: "white" }} /> : <PlayCircle style={{ color: "white" }} />}</IconButton>
           <IconButton onClick={fastForward}>
-            <Forward10 />
+            <Forward10 style={{ color: "white" }} />
           </IconButton>
-          <Slider min={0} max={100} value={volume * 100} onChange={volumeChange} onChangeCommitted={volumeSeek} />
-
-          <IconButton onClick={muting}>{generateVolumeIcon(volume)}</IconButton>
-          <div className="timer">
+          <div style={{ color: "white" }}>
             <span>{playedTime}</span> /<span>{fullMovieTime}</span>
           </div>
-        </div>
-        <div className="video_controls-right">
+          <VolumeWrapper>
+            <IconButton onClick={muting} style={{ color: "white" }}>
+              {generateVolumeIcon(volume)}
+            </IconButton>
+            <Slider min={0} max={100} value={volume * 100} onChange={volumeChange} onChangeCommitted={volumeSeek} className="range" />
+          </VolumeWrapper>
+        </Stack>
+        <div>
           <Button variant="text" onClick={handlePopOver}>
-            <Typography>{playerbackRate}X</Typography>
+            <Typography style={{ color: "white" }}>{playerbackRate}X</Typography>
           </Button>
           <Popover
             id={id}
@@ -178,19 +217,19 @@ export const Controls: FC<ControlsProps> = (props) => {
             <Grid container direction="column-reverse">
               {[0.5, 1, 1.5, 2].map((rate) => (
                 <Button key={rate} variant="text" onClick={() => playRate(rate)}>
-                  <Typography color={rate === playerbackRate ? "secondary" : "default"}>{rate}</Typography>
+                  <Typography color={rate === playerbackRate ? "info.main" : "primary.main"}>{rate}X</Typography>
                 </Button>
               ))}
             </Grid>
           </Popover>
-          <IconButton>
-            <PictureInPictureAlt />
+          <IconButton onClick={onPip}>
+            <PictureInPictureAlt style={{ color: "white" }} />
           </IconButton>
           <IconButton onClick={fullScreenMode}>
-            <Fullscreen />
+            <Fullscreen style={{ color: "white" }} />
           </IconButton>
         </div>
       </Stack>
-    </div>
+    </ControlsStyled>
   );
 };
