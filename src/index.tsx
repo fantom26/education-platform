@@ -5,7 +5,7 @@ import { ThemeProvider } from "theme";
 
 import "styles/libs/react-toastify.css";
 
-import { App } from "./App";
+import { App } from "./app";
 import { store } from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);

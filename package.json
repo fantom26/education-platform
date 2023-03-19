@@ -1,7 +1,6 @@
 {
   "name": "education-platform",
   "version": "0.1.0",
-  "homepage": "http://fantom26.github.io/education-platform",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -9,9 +8,6 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
     "@reduxjs/toolkit": "^1.9.3",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
     "dayjs": "^1.11.7",
     "hls.js": "^1.3.4",
     "mui-image": "^1.0.7",
@@ -28,8 +24,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "yarn build",
-    "deploy": "gh-pages -d build",
     "prettier": "prettier -w .",
     "lint": "eslint -c .eslintrc src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix"
@@ -54,7 +48,6 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
-    "@types/jest": "^29.5.0",
     "@types/mui-image": "^1.0.1",
     "@types/node": "^18.15.3",
     "@types/react": "^18.0.28",
@@ -66,7 +59,6 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "gh-pages": "^5.0.0",
     "prettier": "^2.8.4",
     "typescript": "^5.0.2"
   }
