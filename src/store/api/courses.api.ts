@@ -18,7 +18,7 @@ export const coursesApi = createApi({
   endpoints: (builder) => ({
     getCourses: builder.query<{ courses: ICourseCard[] }, void>({
       query: () => ({
-        url: "/core/preview-courses"
+        url: "/core/preview-course"
       })
     })
   })

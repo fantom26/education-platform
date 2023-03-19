@@ -30,9 +30,9 @@ const Course: FC = () => {
       const response = await CourseService.getCourseInfo(id).then((response) => response.json());
 
       setInfo(response);
-    } catch (e) {
+    } catch (error) {
       // eslint-disable-next-line no-console
-      console.log(e);
+      console.log(error);
     } finally {
       setLoading(false);
     }

@@ -6,9 +6,14 @@ import { Router } from "./components/common";
 
 export const App = () => {
   const getToken = async () => {
-    const { token } = await AccessService.getToken().then((response) => response.json());
+    try {
+      const { token } = await AccessService.getToken().then((response) => response.json());
 
-    localStorage.setItem("token", JSON.stringify(token));
+      localStorage.setItem("token", JSON.stringify(token));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
   };
 
   useEffect(() => {

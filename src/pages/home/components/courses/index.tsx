@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Box, Paper, Stack } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 
 import { CourseCard } from "components/cards";
@@ -13,7 +13,7 @@ import { Tags } from "./components/tags";
 export const LIMIT = 10;
 
 export const Courses = () => {
-  const { data, isLoading } = useGetCoursesQuery();
+  const { data, isLoading, isError } = useGetCoursesQuery();
   const [page, setPage] = useState(1);
   const [searchParams] = useSearchParams();
   const paramsURL = Object.fromEntries(searchParams.entries());
@@ -55,9 +55,8 @@ export const Courses = () => {
   return (
     <Box sx={{ paddingBlock: 3 }}>
       <Container>
-        {isLoading ? (
-          <Loader />
-        ) : (
+        {isLoading && <Loader />}
+        {!isLoading && !isError && (
           <>
             <Tags courses={data?.courses || []} />
             <Stack spacing={3}>
@@ -69,6 +68,11 @@ export const Courses = () => {
             </Stack>
             {(filteredCourses?.length || 0) > LIMIT && !isLoading && <Pagination courses={filteredCourses || []} page={page} changePage={changePage} />}
           </>
+        )}
+        {isError && (
+          <Typography variant="h5" align="center" color="red">
+            Error! Try to reload the page!
+          </Typography>
         )}
       </Container>
     </Box>
