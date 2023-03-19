@@ -12,7 +12,7 @@ interface LessonsProps {
 }
 
 export const Lessons: FC<LessonsProps> = ({ lessons, currentLesson, onSelectLesson }) => (
-  <List sx={{ height: 430, overflowY: "auto" }}>
+  <List sx={{ height: { xs: "250px", md: "415px" }, overflowY: "auto" }}>
     {lessons?.map((lesson, index) => (
       <ListItem key={lesson.id} disablePadding>
         <ListItemButton onClick={() => onSelectLesson(lesson)} disabled={lesson?.status === "locked"} divider selected={lesson?.id === currentLesson.id}>

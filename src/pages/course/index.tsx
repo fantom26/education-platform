@@ -63,8 +63,8 @@ const Course: FC = () => {
             <Rating name="course-rating" defaultValue={info?.rating} size="large" precision={0.5} readOnly />
           </Box>
           <Demo>
-            <Stack direction="row" gap={2}>
-              <Box sx={{ maxWidth: "300px" }}>
+            <Stack direction={{ xs: "column", sm: "row" }} gap={2}>
+              <Box sx={{ maxWidth: { sm: "300px" } }}>
                 <Image
                   src={`${info?.previewImageLink as string}/cover.webp`}
                   duration={0}
@@ -77,7 +77,7 @@ const Course: FC = () => {
                 />
               </Box>
               <Stack spacing={2}>
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={2} flexWrap="wrap">
                   <Created launchDate={info?.launchDate || ""} />
                   <Duration duration={info?.duration || 0} />
                   <Lessons lessonsCount={info?.lessons.length || 1} />

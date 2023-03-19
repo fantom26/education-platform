@@ -19,14 +19,14 @@ export const Header = (props: any) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography variant="h6" sx={{ my: 2, color: "#000000" }}>
         <Logo />
       </Typography>
       <Divider />
-      <List>
+      <List sx={{ p: "10px", display: "flex", flexDirection: "column", gap: "10px" }}>
         {SOCIALS.map(({ name, link }) => (
           <ListItem key={name} disablePadding>
-            <Link component={RouterLink} to={link}>
+            <Link component={RouterLink} to={link} target="_blank">
               {name}
             </Link>
           </ListItem>
@@ -46,12 +46,12 @@ export const Header = (props: any) => {
             <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: "none" } }}>
               <Menu />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: "#ffffff", display: { xs: "none", sm: "block" } }}>
               <Logo />
             </Typography>
             <Stack direction="row" gap={2} sx={{ display: { xs: "none", sm: "flex" } }}>
               {SOCIALS.map(({ name, link }) => (
-                <Button component={RouterLink} to={link} key={name} sx={{ color: "#fff" }} variant="text" startIcon={ICONS[name.toLowerCase()]}>
+                <Button component={RouterLink} to={link} key={name} sx={{ color: "#fff" }} target="_blank" variant="text" startIcon={ICONS[name.toLowerCase()]}>
                   {name}
                 </Button>
               ))}

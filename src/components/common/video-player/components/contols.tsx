@@ -72,7 +72,7 @@ const VolumeBar = styled(Slider)({
 const VolumeWrapper = styled("div")({
   display: "flex",
   alignItems: "center",
-  width: 150,
+
   gap: 5,
   "& > .range": {
     width: "0%",
@@ -157,36 +157,42 @@ export const Controls: FC<ControlsProps> = (props) => {
 
   return (
     <ControlsStyled>
-      <ProgressBar
-        min={0}
-        max={100}
-        value={played}
-        onChange={onSeek}
-        onMouseDown={onSeekMouseDown}
-        onChangeCommitted={onSeekMouseUp}
-        valueLabelDisplay="auto"
-      />
-      <Stack direction="row" gap={2} justifyContent="space-between">
-        <Stack direction="row" gap={1} alignItems="center">
-          <IconButton onClick={rewind}>
+      <ProgressBar min={0} max={100} value={played} onChange={onSeek} onMouseDown={onSeekMouseDown} onChangeCommitted={onSeekMouseUp} />
+      <Stack direction="row" gap={{ xs: 1, md: 2 }} justifyContent="space-between">
+        <Stack direction="row" alignItems="center">
+          <IconButton size="small" onClick={rewind}>
             <Replay10 style={{ color: "white" }} />
           </IconButton>
-          <IconButton onClick={playandpause}>{playing ? <PauseCircle style={{ color: "white" }} /> : <PlayCircle style={{ color: "white" }} />}</IconButton>
-          <IconButton onClick={fastForward}>
+          <IconButton size="small" onClick={playandpause}>
+            {playing ? <PauseCircle style={{ color: "white" }} /> : <PlayCircle style={{ color: "white" }} />}
+          </IconButton>
+          <IconButton size="small" onClick={fastForward}>
             <Forward10 style={{ color: "white" }} />
           </IconButton>
           <div style={{ color: "white" }}>
             <span>{playedTime}</span> /<span>{fullMovieTime}</span>
           </div>
-          <VolumeWrapper>
-            <IconButton onClick={muting} style={{ color: "white" }}>
+          <VolumeWrapper sx={{ flexDirection: { xs: "column-reverse", md: "row" }, width: { xs: "34px", md: "150px" } }}>
+            <IconButton size="small" onClick={muting} style={{ color: "white" }}>
               {generateVolumeIcon(volume)}
             </IconButton>
-            <VolumeBar min={0} max={100} value={volume * 100} onChange={volumeChange} onChangeCommitted={volumeSeek} className="range" />
+            <VolumeBar
+              min={0}
+              max={100}
+              value={volume * 100}
+              onChange={volumeChange}
+              onChangeCommitted={volumeSeek}
+              className="range"
+              sx={{
+                position: { xs: "absolute", md: "relative" },
+                bottom: { xs: "60px", md: "initial" },
+                transform: { xs: "rotate(-90deg)", md: "initial" }
+              }}
+            />
           </VolumeWrapper>
         </Stack>
         <div>
-          <Button variant="text" onClick={handlePopOver}>
+          <Button variant="text" onClick={handlePopOver} sx={{ minWidth: "40px" }}>
             <Typography style={{ color: "white" }}>{playerbackRate}X</Typography>
           </Button>
           <Popover
@@ -211,10 +217,10 @@ export const Controls: FC<ControlsProps> = (props) => {
               ))}
             </Grid>
           </Popover>
-          <IconButton onClick={onPip}>
+          <IconButton size="small" onClick={onPip}>
             <PictureInPictureAlt style={{ color: "white" }} />
           </IconButton>
-          <IconButton onClick={fullScreenMode}>
+          <IconButton size="small" onClick={fullScreenMode}>
             <Fullscreen style={{ color: "white" }} />
           </IconButton>
         </div>

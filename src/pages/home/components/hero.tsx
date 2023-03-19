@@ -8,7 +8,7 @@ import { REACT_APP_URL } from "utils/constants";
 export const Hero = () => (
   <Box sx={{ paddingBlock: 3 }}>
     <Container>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" gap={3}>
+      <Stack direction={{ sm: "row" }} alignItems="center" justifyContent="space-between" gap={3}>
         <Box sx={{ maxWidth: 570, width: "100%" }}>
           <Typography variant="h4" component="h1" gutterBottom>
             <Typewriter
@@ -27,7 +27,7 @@ export const Hero = () => (
             />
           </Typography>
         </Box>
-        <Box sx={{ maxWidth: 474, width: "100%" }}>
+        <Box sx={{ maxWidth: "474px", width: "100%" }}>
           <Image src={`${REACT_APP_URL}/images/img@1x.png`} duration={0} shift={null} distance={0} easing="linear" width="474" height="614" fit="cover" />
         </Box>
       </Stack>

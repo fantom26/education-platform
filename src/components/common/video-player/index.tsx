@@ -32,6 +32,7 @@ const PlayerStyled = styled("div")({
 interface VideoPlayerProps {
   poster?: string;
   link: string;
+  styles?: Record<string, string>;
 }
 
 interface IPlayerState {
@@ -42,7 +43,7 @@ interface IPlayerState {
   seeking: boolean;
 }
 
-export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
+export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link, styles }) => {
   const [playerState, setPlayerState] = useState<IPlayerState>({
     playing: false,
     volume: 0.5,
@@ -168,9 +169,8 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
 
   const handlePlayerMouseSeekUp = (event: SyntheticEvent | Event, newValue: number | Array<number>) => {
     setPlayerState({ ...playerState, seeking: false });
-
     if (playerRef.current) {
-      playerRef.current.currentTime = (newValue as number) / 100;
+      playerRef.current.currentTime = ((newValue as number) * playerRef.current.duration) / 100;
     }
   };
 
@@ -186,7 +186,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
   const fullMovieTime = format(movieDuration);
 
   return (
-    <PlayerStyled ref={playerWrapperRef}>
+    <PlayerStyled ref={playerWrapperRef} sx={styles}>
       <video
         preload="metadata"
         ref={playerRef}

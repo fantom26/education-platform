@@ -1,6 +1,6 @@
 import { FC, useRef, useState } from "react";
 
-import { Box, Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Rating, Stack, Typography } from "@mui/material";
 
 import { useHLSPlayer } from "hooks";
 import { ICourseCard } from "utils/types";
@@ -41,15 +41,23 @@ export const CourseCard: FC<ICourseCard> = (props) => {
 
   return (
     <Card
-      sx={{ minWidth: 275, minHeight: 225, display: "flex", justifyContent: "space-between", gap: 3 }}
+      sx={{
+        minWidth: 275,
+        minHeight: 225,
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        justifyContent: "space-between",
+        gap: { xs: "10px", md: "20px" }
+      }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <Box
         sx={{
           position: "relative",
-          maxWidth: "300px",
-          width: "100%"
+          maxWidth: { md: "300px" },
+          width: "100%",
+          minHeight: "235px"
         }}
       >
         <video ref={playerRef} muted preload="metadata" loop style={videoShowed ? shownVideoStyles : unShownVideoStyles}></video>
@@ -73,7 +81,7 @@ export const CourseCard: FC<ICourseCard> = (props) => {
                 {isPaid ? "Premium" : "Free"}
               </Typography>
             </Box>
-            <CardMedia sx={{ height: "100%", width: "100%" }} image={`${previewImageLink}/cover.webp`} title="Course preview" />
+            <CardMedia sx={{ height: "100%", width: "100%", minHeight: "235px" }} image={`${previewImageLink}/cover.webp`} title="Course preview" />
           </>
         )}
       </Box>
@@ -85,7 +93,7 @@ export const CourseCard: FC<ICourseCard> = (props) => {
               {title}
             </Typography>
             <Typography align="left" variant="body2">
-              {description}
+              {description}``
             </Typography>
             <Skills skills={skills} />
           </Box>
@@ -94,6 +102,7 @@ export const CourseCard: FC<ICourseCard> = (props) => {
             <Duration duration={duration} />
             <Lessons lessonsCount={lessonsCount} />
           </Stack>
+          <Rating name="course-rating" defaultValue={rating} precision={0.5} readOnly sx={{ display: { xs: "flex", md: "none" } }} />
         </Stack>
       </CardContent>
 
