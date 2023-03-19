@@ -15,6 +15,8 @@ import {
 import { Button, Grid, IconButton, Popover, Slider, Stack, Tooltip, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { playerbackRates } from "utils/enums";
+
 const ProgressBar = styled(Slider)({
   height: 5,
   width: "calc(100% - 10px)",
@@ -235,7 +237,7 @@ export const Controls: FC<ControlsProps> = (props) => {
             }}
           >
             <Grid container direction="column-reverse">
-              {[0.5, 1, 1.5, 2].map((rate) => (
+              {Object.values(playerbackRates).map((rate) => (
                 <Button key={rate} variant="text" onClick={() => playRate(rate)}>
                   <Typography color={rate === playerbackRate ? "info.main" : "primary.main"}>{rate}X</Typography>
                 </Button>

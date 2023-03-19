@@ -3,6 +3,7 @@ import { FC, KeyboardEvent, SyntheticEvent, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 
 import { useHLSPlayer } from "hooks";
+import { playerbackRates } from "utils/enums";
 
 import { Controls } from "./components/contols";
 
@@ -33,11 +34,19 @@ interface VideoPlayerProps {
   link: string;
 }
 
+interface IPlayerState {
+  playing: boolean;
+  volume: number;
+  playerbackRate: number;
+  played: number;
+  seeking: boolean;
+}
+
 export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
-  const [playerState, setPlayerState] = useState({
+  const [playerState, setPlayerState] = useState<IPlayerState>({
     playing: false,
     volume: 0.5,
-    playerbackRate: 1.0,
+    playerbackRate: playerbackRates.normal,
     played: 0,
     seeking: false
   });
@@ -103,9 +112,17 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
   };
 
   const handlePlayerRateByKeyboard = (event: KeyboardEvent<HTMLVideoElement>) => {
-    console.log(event);
-    if (event.code === "KeyZ" && (event.ctrlKey || event.metaKey)) {
-      console.log("log");
+    if (event.code === "Period" && event.shiftKey && playerRef.current) {
+      if (playerRef.current.playbackRate < playerbackRates.fastest) {
+        setPlayerState({ ...playerState, playerbackRate: playerRef.current.playbackRate + 0.5 });
+        playerRef.current.playbackRate += 0.5;
+      }
+    }
+    if (event.code === "Comma" && event.shiftKey && playerRef.current) {
+      if (playerRef.current.playbackRate > playerbackRates.slow) {
+        setPlayerState({ ...playerState, playerbackRate: playerRef.current.playbackRate - 0.5 });
+        playerRef.current.playbackRate -= 0.5;
+      }
     }
   };
 
@@ -118,7 +135,6 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
 
   const setFocusOnVideo = () => {
     if (playerRef.current) {
-      console.log("focus");
       playerRef.current.focus();
     }
   };
