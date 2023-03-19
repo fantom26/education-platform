@@ -90,7 +90,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
     }
   };
 
-  const handleVolumeChange = (event: Event, newValue: number | Array<number>, activeThumb: number) => {
+  const handleVolumeChange = (event: Event, newValue: number | Array<number>) => {
     setPlayerState({ ...playerState, volume: (newValue as number) / 100 });
     if (playerRef.current) {
       playerRef.current.volume = (newValue as number) / 100;
@@ -149,7 +149,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
     }
   };
 
-  const handlePlayerSeek = (event: Event, newValue: number | Array<number>, activeThumb: number) => {
+  const handlePlayerSeek = (event: Event, newValue: number | Array<number>) => {
     setPlayerState({ ...playerState, played: (newValue as number) / 100 });
     if (playerRef.current) {
       playerRef.current.currentTime = (newValue as number) / 100;
@@ -198,6 +198,7 @@ export const VideoPlayer: FC<VideoPlayerProps> = ({ poster, link }) => {
         tabIndex={0}
         width="100%"
         height="100%"
+        style={{ outline: "none" }}
       ></video>
       <Controls
         playandpause={handlePlayAndPause}

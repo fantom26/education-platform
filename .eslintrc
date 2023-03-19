@@ -1,10 +1,5 @@
 {
-  "extends": [
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:import/recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
+  "extends": ["plugin:react/recommended", "plugin:react/jsx-runtime", "plugin:import/recommended", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -159,10 +154,7 @@
     "nonblock-statement-body-position": ["warn", "beside"],
     "object-curly-newline": ["warn", { "consistent": true }],
     "object-curly-spacing": ["warn", "always"],
-    "object-property-newline": [
-      "warn",
-      { "allowAllPropertiesOnSameLine": true }
-    ],
+    "object-property-newline": ["warn", { "allowAllPropertiesOnSameLine": true }],
     "rest-spread-spacing": ["warn", "never"],
     "semi-spacing": ["warn", { "before": false, "after": true }],
     "semi": ["warn", "always"],

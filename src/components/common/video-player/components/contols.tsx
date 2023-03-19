@@ -1,21 +1,11 @@
-import { FC, SyntheticEvent, useState } from "react";
+import { FC, MouseEvent, SyntheticEvent, useState } from "react";
 
-import {
-  Forward10,
-  Fullscreen,
-  PauseCircle,
-  PictureInPictureAlt,
-  PlayCircle,
-  Replay10,
-  VolumeDown,
-  VolumeMute,
-  VolumeOff,
-  VolumeUp
-} from "@mui/icons-material";
-import { Button, Grid, IconButton, Popover, Slider, Stack, Tooltip, Typography } from "@mui/material";
+import { Forward10, Fullscreen, PauseCircle, PictureInPictureAlt, PlayCircle, Replay10 } from "@mui/icons-material";
+import { Button, Grid, IconButton, Popover, Slider, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { playerbackRates } from "utils/enums";
+import { generateVolumeIcon } from "utils/helper";
 
 const ProgressBar = styled(Slider)({
   height: 5,
@@ -119,9 +109,9 @@ interface ControlsProps {
   rewind: () => void;
   fastForward: () => void;
   playandpause: () => void;
-  volumeChange: (event: Event, value: number | Array<number>, activeThumb: number) => void;
+  volumeChange: (event: Event, value: number | Array<number>) => void;
   volumeSeek: (event: SyntheticEvent | Event, value: number | Array<number>) => void;
-  onSeek: (event: Event, value: number | Array<number>, activeThumb: number) => void;
+  onSeek: (event: Event, value: number | Array<number>) => void;
   muting: () => void;
   fullScreenMode: () => void;
   onPip: () => void;
@@ -151,18 +141,11 @@ export const Controls: FC<ControlsProps> = (props) => {
     playRate,
     onSeekMouseDown
   } = props;
-  const [anchorEl, setAnchorEl] = useState(null);
-  // TODO replace any
-  const handlePopOver = (e: any) => {
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handlePopOver = (e: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
-
-  // TODO replace any
-  const ValueLabelComponent = (children: any, value: any) => (
-    <Tooltip enterTouchDelay={0} placement="top" title={value}>
-      {children}
-    </Tooltip>
-  );
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -171,19 +154,6 @@ export const Controls: FC<ControlsProps> = (props) => {
   const open = Boolean(anchorEl);
   // eslint-disable-next-line no-undefined
   const id = open ? "playbackrate-popover" : undefined;
-
-  const generateVolumeIcon = (volume: number) => {
-    const volumeInt = volume * 100;
-    if (volumeInt === 0) {
-      return <VolumeOff />;
-    } else if (volumeInt < 39) {
-      return <VolumeMute />;
-    } else if (volumeInt > 38 && volumeInt < 79) {
-      return <VolumeDown />;
-    } else {
-      return <VolumeUp />;
-    }
-  };
 
   return (
     <ControlsStyled>
@@ -195,9 +165,6 @@ export const Controls: FC<ControlsProps> = (props) => {
         onMouseDown={onSeekMouseDown}
         onChangeCommitted={onSeekMouseUp}
         valueLabelDisplay="auto"
-        // components={{
-        //   ValueLabel: ValueLabelComponent
-        // }}
       />
       <Stack direction="row" gap={2} justifyContent="space-between">
         <Stack direction="row" gap={1} alignItems="center">

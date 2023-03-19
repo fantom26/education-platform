@@ -4,6 +4,7 @@ import { Stack } from "@mui/material";
 
 import { ILesson } from "utils/types";
 
+import { Instructions } from "./instructions";
 import { Lessons } from "./lessons";
 import { Player } from "./player";
 
@@ -15,9 +16,12 @@ export const PlayerBox: FC<{ lessons: ILesson[] }> = ({ lessons }) => {
   };
 
   return (
-    <Stack direction="row" gap={2}>
-      <Player lesson={currentLesson} />
-      <Lessons lessons={lessons} onSelectLesson={selectLesson} currentLesson={currentLesson} />
-    </Stack>
+    <>
+      <Stack direction="row" gap={2}>
+        <Player lesson={currentLesson} />
+        <Lessons lessons={lessons} onSelectLesson={selectLesson} currentLesson={currentLesson} />
+      </Stack>
+      <Instructions />
+    </>
   );
 };
